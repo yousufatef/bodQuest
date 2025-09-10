@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
-import { useNotification } from '../context/NotificationContext';
 import type { PaginationInfo, Post } from '@/types';
 import { postsApi } from '@/service/api';
+import { toast } from 'sonner';
 
 export function usePosts() {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -15,9 +15,6 @@ export function usePosts() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
-
-    const { showNotification } = useNotification();
-
     const fetchPosts = async (page = 1, search = searchQuery) => {
         setIsLoading(true);
         setError(null);
@@ -28,7 +25,7 @@ export function usePosts() {
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Failed to fetch posts';
             setError(errorMessage);
-            showNotification('error', 'Error', errorMessage);
+            toast.error('Error', { description: errorMessage });
         } finally {
             setIsLoading(false);
         }
@@ -37,11 +34,12 @@ export function usePosts() {
     const createPost = async (data: Omit<Post, 'id' | 'user'>) => {
         try {
             await postsApi.create(data);
-            showNotification('success', 'Success', 'Post created successfully');
+            toast.success('Post created successfully');
+
             fetchPosts();
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Failed to create post';
-            showNotification('error', 'Error', errorMessage);
+            toast.error('Error', { description: errorMessage });
             throw err;
         }
     };
@@ -49,11 +47,11 @@ export function usePosts() {
     const updatePost = async (id: number, data: Partial<Post>) => {
         try {
             await postsApi.update(id, data);
-            showNotification('success', 'Success', 'Post updated successfully');
+            toast.success('Post updated successfully');
             fetchPosts();
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Failed to update post';
-            showNotification('error', 'Error', errorMessage);
+            toast.error('Error', { description: errorMessage });
             throw err;
         }
     };
@@ -61,11 +59,11 @@ export function usePosts() {
     const deletePost = async (id: number) => {
         try {
             await postsApi.delete(id);
-            showNotification('success', 'Success', 'Post deleted successfully');
+            toast.success('Post deleted successfully');
             fetchPosts();
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Failed to delete post';
-            showNotification('error', 'Error', errorMessage);
+            toast.error('Error', { description: errorMessage });
             throw err;
         }
     };

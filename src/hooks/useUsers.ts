@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useNotification } from '../context/NotificationContext';
 import type { User } from '@/types';
 import { usersApi } from '@/service/api';
+import { toast } from 'sonner';
 
 export function useUsers() {
     const [users, setUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const { showNotification } = useNotification();
 
     const fetchUsers = async () => {
         setIsLoading(true);
@@ -19,7 +18,7 @@ export function useUsers() {
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Failed to fetch users';
             setError(errorMessage);
-            showNotification('error', 'Error', errorMessage);
+            toast.error('Error', { description: errorMessage });
         } finally {
             setIsLoading(false);
         }
