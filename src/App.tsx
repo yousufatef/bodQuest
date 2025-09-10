@@ -7,7 +7,7 @@ import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { Posts } from './pages/Posts';
 import { Users } from './pages/Users';
-import { Settings } from './pages/Settings';
+import { Settings } from './pages/settings/Settings';
 
 function App() {
   return (

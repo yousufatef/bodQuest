@@ -21,9 +21,11 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Edit2, Trash2, Search, Loader2 } from "lucide-react";
+import { Edit2, Trash2, Search } from "lucide-react";
 import { PostsPagination } from "./PostsPagination";
 import type { Post, User } from "@/types";
+import LoadingState from "../shared/LoadingState";
+import EmptyState from "../shared/EmptyState";
 
 interface PostsTableProps {
     posts: Post[];
@@ -94,18 +96,9 @@ export function PostsTable({
                     </TableHeader>
                     <TableBody>
                         {isLoading ? (
-                            <TableRow>
-                                <TableCell colSpan={5} className="text-center py-8">
-                                    <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                                    <p className="mt-2 text-sm text-muted-foreground">Loading posts...</p>
-                                </TableCell>
-                            </TableRow>
+                            <LoadingState loadingMessage="Loading posts..." />
                         ) : posts.length === 0 ? (
-                            <TableRow>
-                                <TableCell colSpan={5} className="text-center py-8">
-                                    <p className="text-muted-foreground">No posts found</p>
-                                </TableCell>
-                            </TableRow>
+                            <EmptyState emptyMessage="No posts found" />
                         ) : (
                             posts.map((post) => (
                                 <TableRow key={post.id}>
