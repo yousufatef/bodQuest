@@ -30,7 +30,7 @@ This project demonstrates the foundation of a scalable platform, built with clea
 - **State Management**
 
   - Context API for authentication, notifications, and shared data.
-  - Custom hooks (`useAuth`, `useEntries`, `usePagination`) to separate logic from UI.
+  - Custom hooks (`useAuth`, `usePosts`, `useUsers`) to separate logic from UI.
 
 - **Notifications & Error Handling**
 
