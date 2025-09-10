@@ -29,12 +29,12 @@ This project demonstrates the foundation of a scalable platform, built with clea
 
 - **State Management**
 
-  - Context API for authentication, notifications, and shared data.
+  - Context API for authentication.
   - Custom hooks (`useAuth`, `usePosts`, `useUsers`) to separate logic from UI.
 
 - **Notifications & Error Handling**
 
-  - Success and error messages with **shadcn/ui Toaster**.
+  - Success and error messages with **shadcn/ui Sooner**.
   - Loading spinners and error boundaries for API calls.
 
 - **Mocked Authentication**
