@@ -48,13 +48,3 @@ export interface ApiResponse<T> {
     data: T;
     pagination?: PaginationInfo;
 }
-
-export type NotificationType = 'success' | 'error' | 'info' | 'warning';
-
-export interface Notification {
-    id: string;
-    type: NotificationType;
-    title: string;
-    description?: string;
-    duration?: number;
-}

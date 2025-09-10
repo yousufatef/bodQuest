@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { User } from '@/types';
-import { usersApi } from '@/service/api';
+import { usersApi } from '@/service/usersApi';
 import { toast } from 'sonner';
 
 export function useUsers() {

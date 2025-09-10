@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
     Table,
     TableBody,
@@ -6,18 +6,10 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from '@/components/ui/pagination';
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -28,12 +20,14 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { Edit2, Trash2, Search, Loader2 } from 'lucide-react';
-import type { Post } from '@/types';
+} from "@/components/ui/alert-dialog";
+import { Edit2, Trash2, Search, Loader2 } from "lucide-react";
+import { PostsPagination } from "./PostsPagination";
+import type { Post, User } from "@/types";
 
 interface PostsTableProps {
     posts: Post[];
+    users: User[];
     pagination: {
         page: number;
         limit: number;
@@ -50,6 +44,7 @@ interface PostsTableProps {
 
 export function PostsTable({
     posts,
+    users = [],
     pagination,
     isLoading,
     searchQuery,
@@ -67,31 +62,12 @@ export function PostsTable({
         }
     };
 
-    const renderPaginationItems = () => {
-        const items = [];
-        const maxVisible = 5;
-        const start = Math.max(1, pagination.page - Math.floor(maxVisible / 2));
-        const end = Math.min(pagination.totalPages, start + maxVisible - 1);
-
-        for (let i = start; i <= end; i++) {
-            items.push(
-                <PaginationItem key={i}>
-                    <PaginationLink
-                        onClick={() => onPageChange(i)}
-                        isActive={pagination.page === i}
-                        className="cursor-pointer"
-                    >
-                        {i}
-                    </PaginationLink>
-                </PaginationItem>
-            );
-        }
-
-        return items;
-    };
+    const getAuthorName = (userId: number) =>
+        users.find((u) => u.id === userId)?.name || "Unknown";
 
     return (
         <div className="space-y-4">
+            {/* Search */}
             <div className="flex items-center space-x-2">
                 <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -104,6 +80,7 @@ export function PostsTable({
                 </div>
             </div>
 
+            {/* Table */}
             <div className="border rounded-md">
                 <Table>
                     <TableHeader>
@@ -138,10 +115,8 @@ export function PostsTable({
                                     <TableCell className="font-medium max-w-xs truncate">
                                         {post.title}
                                     </TableCell>
-                                    <TableCell>{post.user?.name || 'Unknown'}</TableCell>
-                                    <TableCell className="max-w-md truncate">
-                                        {post.body}
-                                    </TableCell>
+                                    <TableCell>{getAuthorName(post.userId)}</TableCell>
+                                    <TableCell className="max-w-md truncate">{post.body}</TableCell>
                                     <TableCell className="text-right">
                                         <div className="flex justify-end space-x-2">
                                             <Button
@@ -187,40 +162,19 @@ export function PostsTable({
                 </Table>
             </div>
 
-            {pagination.totalPages > 1 && (
-                <div className="flex items-center justify-between">
-                    <p className="text-sm text-muted-foreground">
-                        Showing {(pagination.page - 1) * pagination.limit + 1} to{' '}
-                        {Math.min(pagination.page * pagination.limit, pagination.total)} of{' '}
-                        {pagination.total} results
-                    </p>
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious
-                                    onClick={() => onPageChange(pagination.page - 1)}
-                                    className={
-                                        pagination.page <= 1
-                                            ? 'pointer-events-none opacity-50'
-                                            : 'cursor-pointer'
-                                    }
-                                />
-                            </PaginationItem>
-                            {renderPaginationItems()}
-                            <PaginationItem>
-                                <PaginationNext
-                                    onClick={() => onPageChange(pagination.page + 1)}
-                                    className={
-                                        pagination.page >= pagination.totalPages
-                                            ? 'pointer-events-none opacity-50'
-                                            : 'cursor-pointer'
-                                    }
-                                />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
-                </div>
-            )}
+            {/* Pagination */}
+            <div className="flex items-center justify-between">
+                <p className="text-sm text-muted-foreground">
+                    Showing {(pagination.page - 1) * pagination.limit + 1} to{" "}
+                    {Math.min(pagination.page * pagination.limit, pagination.total)} of{" "}
+                    {pagination.total} results
+                </p>
+                <PostsPagination
+                    currentPage={pagination.page}
+                    totalPages={pagination.totalPages}
+                    onPageChange={onPageChange}
+                />
+            </div>
         </div>
     );
 }

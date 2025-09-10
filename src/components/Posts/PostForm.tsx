@@ -1,5 +1,5 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
     Dialog,
     DialogContent,
@@ -7,7 +7,7 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
     Form,
     FormControl,
@@ -15,20 +15,20 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { postSchema, type PostFormData } from '@/utils/validation';
-import { Loader2 } from 'lucide-react';
-import type { Post, User } from '@/types';
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { postSchema, type PostFormData } from "@/utils/validation";
+import { Loader2 } from "lucide-react";
+import type { Post, User } from "@/types";
 
 interface PostFormProps {
     isOpen: boolean;
@@ -44,7 +44,7 @@ export function PostForm({
     onClose,
     onSubmit,
     post,
-    users,
+    users = [],
     isLoading = false,
 }: PostFormProps) {
     const isEditing = !!post;
@@ -52,21 +52,16 @@ export function PostForm({
     const form = useForm<PostFormData>({
         resolver: zodResolver(postSchema),
         defaultValues: {
-            title: post?.title || '',
-            body: post?.body || '',
+            title: post?.title || "",
+            body: post?.body || "",
             userId: post?.userId || 1,
         },
     });
 
     const handleSubmit = async (data: PostFormData) => {
-        try {
-            await onSubmit(data);
-            form.reset();
-            onClose();
-        } catch (error) {
-            // Error is handled in the hook
-            console.error('Form submission error:', error);
-        }
+        await onSubmit(data);
+        form.reset();
+        onClose();
     };
 
     const handleClose = () => {
@@ -78,11 +73,11 @@ export function PostForm({
         <Dialog open={isOpen} onOpenChange={handleClose}>
             <DialogContent className="sm:max-w-[525px]">
                 <DialogHeader>
-                    <DialogTitle>{isEditing ? 'Edit Post' : 'Create New Post'}</DialogTitle>
+                    <DialogTitle>{isEditing ? "Edit Post" : "Create New Post"}</DialogTitle>
                     <DialogDescription>
                         {isEditing
-                            ? 'Update the post details below.'
-                            : 'Fill in the details to create a new post.'}
+                            ? "Update the post details below."
+                            : "Fill in the details to create a new post."}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -154,7 +149,7 @@ export function PostForm({
                             </Button>
                             <Button type="submit" disabled={isLoading}>
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                {isEditing ? 'Update' : 'Create'}
+                                {isEditing ? "Update" : "Create"}
                             </Button>
                         </DialogFooter>
                     </form>

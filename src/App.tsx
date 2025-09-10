@@ -12,7 +12,6 @@ import { Settings } from './pages/Settings';
 function App() {
   return (
     <>
-      {/* حط الـ Toaster مرة واحدة بس */}
       <Toaster richColors position="top-right" />
       <Router>
         <AuthProvider>

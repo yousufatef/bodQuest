@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
 import type { PaginationInfo, Post } from '@/types';
-import { postsApi } from '@/service/api';
 import { toast } from 'sonner';
+import { postsApi } from '@/service/postsApi';
 
 export function usePosts() {
     const [posts, setPosts] = useState<Post[]>([]);

@@ -1,7 +1,13 @@
-import { authApi } from '@/service/api';
-import type { AuthUser } from '@/types';
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-
+import { authApi } from "@/service/authApi";
+import type { AuthUser } from "@/types";
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+    useMemo,
+    type ReactNode,
+} from "react";
 
 interface AuthContextType {
     user: AuthUser | null;
@@ -22,17 +28,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        // Check for existing session on mount
-        const token = localStorage.getItem('auth_token');
-        const userData = localStorage.getItem('auth_user');
+        // Restore session
+        const token = localStorage.getItem("auth_token");
+        const userData = localStorage.getItem("auth_user");
 
         if (token && userData) {
             try {
                 setUser(JSON.parse(userData));
+                // (Optional) validate token with backend
+                // authApi.validate(token).catch(() => logout());
             } catch {
-                // Clear invalid data
-                localStorage.removeItem('auth_token');
-                localStorage.removeItem('auth_user');
+                localStorage.removeItem("auth_token");
+                localStorage.removeItem("auth_user");
             }
         }
         setIsLoading(false);
@@ -42,9 +49,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setIsLoading(true);
         try {
             const userData = await authApi.login(username, password);
+            if (!userData?.token) {
+                throw new Error("Invalid login response");
+            }
             setUser(userData);
-            localStorage.setItem('auth_token', userData.token);
-            localStorage.setItem('auth_user', JSON.stringify(userData));
+            localStorage.setItem("auth_token", userData.token);
+            localStorage.setItem("auth_user", JSON.stringify(userData));
+        } catch (err) {
+            console.error("Login failed:", err);
+            throw err; // let UI handle error
         } finally {
             setIsLoading(false);
         }
@@ -52,17 +65,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const logout = () => {
         setUser(null);
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('auth_user');
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("auth_user");
     };
 
-    const value = {
-        user,
-        isLoading,
-        isAuthenticated: !!user,
-        login,
-        logout,
-    };
+    const value = useMemo(
+        () => ({
+            user,
+            isLoading,
+            isAuthenticated: !!user,
+            login,
+            logout,
+        }),
+        [user, isLoading]
+    );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
@@ -71,7 +87,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 export function useAuth() {
     const context = useContext(AuthContext);
     if (context === undefined) {
-        throw new Error('useAuth must be used within an AuthProvider');
+        throw new Error("useAuth must be used within an AuthProvider");
     }
     return context;
 }

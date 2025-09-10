@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { PostForm } from '@/components/Posts/PostForm';
-import { usePosts } from '@/hooks/usePosts';
-import { useUsers } from '@/hooks/useUsers';
-import { Plus } from 'lucide-react';
-import type { Post } from '@/types';
-import { PostsTable } from '@/components/Posts/PostTable';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { PostForm } from "@/components/Posts/PostForm";
+import { usePosts } from "@/hooks/usePosts";
+import { useUsers } from "@/hooks/useUsers";
+import { Plus } from "lucide-react";
+import type { Post } from "@/types";
+import { PostsTable } from "@/components/Posts/PostTable";
 
 export function Posts() {
     const [isFormOpen, setIsFormOpen] = useState(false);
@@ -66,6 +66,7 @@ export function Posts() {
 
             <PostsTable
                 posts={posts}
+                users={users ?? []}
                 pagination={pagination}
                 isLoading={isLoading}
                 searchQuery={searchQuery}
@@ -80,7 +81,7 @@ export function Posts() {
                 onClose={() => setIsFormOpen(false)}
                 onSubmit={handleFormSubmit}
                 post={selectedPost}
-                users={users}
+                users={users ?? []}
                 isLoading={isSubmitting}
             />
         </div>
