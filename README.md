@@ -1,7 +1,7 @@
 # 📊 Mini Dashboard System
 
 A lightweight and elegant **React + TypeScript** dashboard that allows users to browse, manage, and interact with simple data entries.  
-This project demonstrates the foundation of a scalable platform, built with clean UI, reusable components, and modern development practices.
+This project demonstrates the foundation of a scalable platform, built with clean UI, reusable components, and layered architecture for maintainability.
 
 ---
 
