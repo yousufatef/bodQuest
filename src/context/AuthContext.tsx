@@ -35,8 +35,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         if (token && userData) {
             try {
                 setUser(JSON.parse(userData));
-                // (Optional) validate token with backend
-                // authApi.validate(token).catch(() => logout());
+
             } catch {
                 localStorage.removeItem("auth_token");
                 localStorage.removeItem("auth_user");

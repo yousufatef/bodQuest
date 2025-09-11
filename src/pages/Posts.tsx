@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { PostForm } from "@/components/Posts/PostForm";
+import { PostForm } from "@/components/posts/PostForm";
 import { usePosts } from "@/hooks/usePosts";
 import { useUsers } from "@/hooks/useUsers";
 import { Plus } from "lucide-react";
 import type { Post } from "@/types";
-import { PostsTable } from "@/components/Posts/PostTable";
+import { PostsTable } from "@/components/posts/PostTable";
 
 export function Posts() {
     const [isFormOpen, setIsFormOpen] = useState(false);

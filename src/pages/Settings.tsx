@@ -1,5 +1,5 @@
 import { Settings as SettingsIcon, Shield, Database, Palette } from 'lucide-react';
-import { SettingCard } from './_components/SettingCard';
+import { SettingCard } from '../components/settings/SettingCard';
 
 export function Settings() {
     return (
